@@ -8,7 +8,6 @@ const router = Router();
 
 // CREATE USER
 router.post("/", async (req, res) => {
-  console.log("HIT CREATE USER");
   const { email, password } = req.body;
 
   const existingUser = await pool.query(
@@ -24,13 +23,12 @@ router.post("/", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
-      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING *",
+      "INSERT INTO users (email, password) VALUES ($1, $2) RETURNING id, email, created_at",
       [email, hashedPassword],
     );
 
     res.json(result.rows[0]);
   } catch (err) {
-    console.log("ERROR:", err);
     res.status(500).json({ error: "Failed to create user" });
   }
 });
@@ -90,7 +88,6 @@ router.post("/login", async (req, res) => {
       refreshToken,
     });
   } catch (err) {
-    console.log(err);
     return res.status(500).json({ error: "Failed Login Attempt" });
   }
 });
@@ -119,53 +116,52 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/logout", async (req, res) => {
-    console.log(req.body);
-  const {refreshToken} = req.body;
+  console.log(req.body);
+  const { refreshToken } = req.body;
 
   if (!refreshToken) {
     return res.status(400).json({ error: "No refresh token" });
   }
 
-  await pool.query(
-    "DELETE FROM refresh_tokens WHERE token = $1", 
-    [refreshToken]
-  );
+  await pool.query("DELETE FROM refresh_tokens WHERE token = $1", [
+    refreshToken,
+  ]);
 
-  res.json({message: "Logged out"});
+  res.json({ message: "Logged out" });
 });
 
 router.post("/refresh", async (req, res) => {
-    const {refreshToken} = req.body;
+  const { refreshToken } = req.body;
 
-    if(!refreshToken) {
-        return res.status(401).json({error: "No refresh token"});
+  if (!refreshToken) {
+    return res.status(401).json({ error: "No refresh token" });
+  }
+
+  try {
+    const stored = await pool.query(
+      "SELECT * FROM refresh_tokens WHERE token = $1",
+      [refreshToken],
+    );
+
+    if (stored.rows.length === 0) {
+      return res.status(403).json({ error: "Invalid refresh token" });
     }
 
-    try {
-        const stored = await pool.query(
-            "SELECT * FROM refresh_tokens WHERE token = $1",
-            [refreshToken]
-        );
+    const decoded = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET as string,
+    ) as any;
 
-        if(stored.rows.length === 0) {
-            return res.status(403).json({error: "Invalid refresh token"});
-        }
+    const newAccessToken = jwt.sign(
+      { userId: decoded.userId },
+      process.env.ACCESS_TOKEN_SECRET as string,
+      { expiresIn: "15m" },
+    );
 
-        const decoded = jwt.verify(
-            refreshToken,
-            process.env.REFRESH_TOKEN_SECRET as string
-        ) as any;
-
-        const newAccessToken = jwt.sign(
-            {userId: decoded.userId},
-            process.env.ACCESS_TOKEN_SECRET as string,
-            {expiresIn: "15m"}
-        );
-
-        res.json({accessToken: newAccessToken});
-    } catch(err) {
-        res.status(403).json({error: "Token expired or invalid"})
-    }
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    res.status(403).json({ error: "Token expired or invalid" });
+  }
 });
 
 export default router;

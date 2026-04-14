@@ -76,8 +76,8 @@ server.ts
 
 ### 1. Clone Repository
 
-git clone https://github.com/willio4/fullstack-foundation
-cd fullstack-foundation
+- git clone https://github.com/willio4/fullstack-foundation
+- cd fullstack-foundation
 
 ### 2. Install Dependencies
 
@@ -113,32 +113,32 @@ npm start
 
 ### Auth
 
-POST /users -> Register
+- POST /users -> Register
 
-POST /users/login -> Login
+- POST /users/login -> Login
 
-POST /users/refresh -> Refresh Access Token
+- POST /users/refresh -> Refresh Access Token
 
 ### Products
 
-GET /products -> List products
+- GET /products -> List products
 
-POST /products -> Create product (admin only)
+- POST /products -> Create product (admin only)
 
-PUT /products/:id -> Update product (admin only)
+- PUT /products/:id -> Update product (admin only)
 
 ### Cart
 
-GET /cart -> get user cart
+- GET /cart -> get user cart
 
-POST /cart -> add item
+- POST /cart -> add item
 
-PUT /cart -> update quantity
+- PUT /cart -> update quantity
 
-DELETE /cart -> remove item
+- DELETE /cart -> remove item
 
 ### Orders
 
-POST /orders -> create order from cart
+- POST /orders -> create order from cart
 
-GET /orders -> get user orders
+- GET /orders -> get user orders

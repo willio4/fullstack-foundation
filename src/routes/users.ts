@@ -3,7 +3,6 @@ import { registerUser, loginUser } from "../controllers/userControllers.js";
 import { validate } from "../middleware/validate.js";
 import { registerSchema, loginSchema } from "../validators/userValidator.js";
 import pool from "../db.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { authMiddleware, type AuthRequest } from "../middleware/auth.js";
 import { findUserById } from "../services/userService.js";
@@ -12,10 +11,11 @@ const router = Router();
 
 // Register
 router.post("/", validate(registerSchema), registerUser);
+
 // Login
 router.post("/login", validate(loginSchema), loginUser);
 
-// GET ALL USERS
+// Get all users
 router.get("/", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM users");
@@ -26,14 +26,13 @@ router.get("/", async (req, res) => {
 });
 
 router.get("/me", authMiddleware, async (req: AuthRequest, res) => {
-  if (!req.userId) {
+  if (!req.user || !req.user.userId) {
     return res.status(401).json({ error: "User not authenticated" });
   }
-  const user = await findUserById(req.userId);
+  const user = await findUserById(req.user.userId);
   res.json(user);
 });
 
-// Get user by id
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
 

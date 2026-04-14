@@ -12,8 +12,8 @@ export const createUser = async (email: string, password: string) => {
 
     return result.rows[0];
   } catch (err: any) {
-    if(err.code === '23505') {
-        throw new Error("Email already exists");
+    if (err.code === "23505") {
+      throw new Error("Email already exists");
     }
     throw err;
   }
@@ -29,7 +29,7 @@ export const findUserByEmail = async (email: string) => {
 
 export const findUserById = async (id: number) => {
   const result = await pool.query(
-    "SELECT id, email, created_at FROM users WHERE id = $1",
+    "SELECT id, email, role, created_at FROM users WHERE id = $1",
     [id],
   );
 

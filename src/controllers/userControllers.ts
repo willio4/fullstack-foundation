@@ -1,7 +1,6 @@
 import { createUser, findUserByEmail } from "../services/userService.js";
 import dotenv from "dotenv";
 dotenv.config();
-import pool from "../db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import type { Request, Response } from "express";
@@ -17,7 +16,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
 // Login
 export const loginUser = async (req: Request, res: Response) => {
-  const [email, password] = req.body;
+  const { email, password } = req.body;
 
   const user = await findUserByEmail(email);
 
@@ -43,5 +42,5 @@ export const loginUser = async (req: Request, res: Response) => {
     { expiresIn: "7d" },
   );
 
-  res.json({ accessToken, refreshToken })
+  res.json({ accessToken, refreshToken });
 };

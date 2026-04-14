@@ -53,13 +53,21 @@ This project demonstrates real-world backend architecture, authentication, and t
 ## 📂 Project Structure
 
 src/
+
   controllers/
+  
   middleware/
+  
   routes/
+  
   services/
+  
   validator/
+  
 app.ts
+
 db.ts
+
 server.ts
 
 ---
@@ -80,8 +88,11 @@ npm install
 Create an .env file
 
 PORT=3000
+
 DATABASE_URL=postgres://localhost:5432/foundation_db
+
 ACCESS_TOKEN_SECRET=your_access_token
+
 REFRESH_TOKEN_SECRET=your_refresh_token
 
 ### 4. Run database
@@ -95,6 +106,7 @@ npm run dev
 ### 6. Build for production
 
 npm run build
+
 npm start
 
 ## API Overview
@@ -102,21 +114,31 @@ npm start
 ### Auth
 
 POST /users -> Register
+
 POST /users/login -> Login
+
 POST /users/refresh -> Refresh Access Token
 
 ### Products
+
 GET /products -> List products
+
 POST /products -> Create product (admin only)
+
 PUT /products/:id -> Update product (admin only)
 
 ### Cart
 
 GET /cart -> get user cart
+
 POST /cart -> add item
+
 PUT /cart -> update quantity
+
 DELETE /cart -> remove item
 
 ### Orders
+
 POST /orders -> create order from cart
+
 GET /orders -> get user orders

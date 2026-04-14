@@ -18,7 +18,7 @@ router.post("/login", validate(loginSchema), loginUser);
 // Get all users
 router.get("/", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM users");
+    const result = await pool.query("SELECT * FROM users ORDER BY created_at ASC");
     res.json(result.rows);
   } catch (err) {
     res.status(500).json({ error: "Failed to fetch users" });

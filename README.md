@@ -52,23 +52,15 @@ This project demonstrates real-world backend architecture, authentication, and t
 
 ## 📂 Project Structure
 
-src/
-
-  controllers/
-  
-  middleware/
-  
-  routes/
-  
-  services/
-  
-  validator/
-  
-app.ts
-
-db.ts
-
-server.ts
+- src/
+  - controllers/
+  - middleware/
+  - routes/
+  - services/
+  - validator/
+- app.ts
+- db.ts
+- server.ts
 
 ---
 
@@ -81,12 +73,11 @@ server.ts
 
 ### 2. Install Dependencies
 
-npm install
+- npm install
 
 ### 3. Configure environment variables
 
-Create an .env file
-
+- Create an .env file
 PORT=3000
 
 DATABASE_URL=postgres://localhost:5432/foundation_db
@@ -101,13 +92,13 @@ Make sure PostgreSQL is running and create required tables.
 
 ### 5. Start development server
 
-npm run dev
+- npm run dev
 
 ### 6. Build for production
 
-npm run build
+- npm run build
 
-npm start
+- npm start
 
 ## API Overview
 

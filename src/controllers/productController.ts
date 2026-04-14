@@ -10,7 +10,15 @@ export const createProductHandler = async (req: Request, res: Response) => {
 };
 
 export const getProductsHandler = async (req: Request, res: Response) => {
-    const products = await getAllProducts();
+    const limit = Number(req.query.limit) || 10;
+    const page = Number(req.query.page) || 1;
+    const minPrice = req.query.minPrice ? Number(req.query.minPrice) : undefined;
+    const maxPrice = req.query.minPrice ? Number(req.query.maxPrice) : undefined;
+
+    const offset = (page - 1) * limit;
+
+    const products = await getAllProducts(limit, offset, minPrice, maxPrice);
+
     res.json(products);
 };
 

@@ -2,6 +2,7 @@ import express from "express";
 import usersRouter from "./routes/users.js";
 import productRoutes from "./routes/products.js";
 import cartRoutes from "./routes/cart.js";
+import orderRoutes from "./routes/order.js"
 import { errorHandler } from "./middleware/errorHandler.js";
 
 declare global {
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use("/users", usersRouter);
 app.use("/products", productRoutes);
 app.use("/cart", cartRoutes);
+app.use("/orders", orderRoutes)
 app.use(errorHandler);
 
 export default app;
